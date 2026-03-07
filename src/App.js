@@ -1,24 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import RegisterPage from "./pages/auth/RegisterPage";
+import LoginPage from "./pages/auth/LoginPage";
+import VerifyEmailPage from "./pages/auth/VerifyEmailPage";
+import FlightsPage from "./pages/flights/FlightsPage";
+import MyBookingsPage from "./pages/bookings/MyBookingsPage";
+import PrivateRoute from "./utils/PrivateRoute";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/verify-email" element={<VerifyEmailPage />} />
+        <Route
+          path="/flights"
+          element={
+            <PrivateRoute>
+              <FlightsPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/my-bookings"
+          element={
+            <PrivateRoute>
+              <MyBookingsPage />
+            </PrivateRoute>
+          }
+        />
+        <Route path="/" element={<Navigate to="/flights" />} />
+      </Routes>
+    </Router>
   );
 }
 
