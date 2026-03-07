@@ -4,7 +4,7 @@ import LoginPage from "./pages/auth/LoginPage";
 import VerifyEmailPage from "./pages/auth/VerifyEmailPage";
 import FlightsPage from "./pages/flights/FlightsPage";
 import MyBookingsPage from "./pages/bookings/MyBookingsPage";
-import PrivateRoute from "./utils/PrivateRoute";
+import PrivateRoute from "./utils/PrivateRoute.js";
 
 function App() {
   return (
