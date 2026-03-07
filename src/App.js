@@ -4,14 +4,29 @@ import LoginPage from "./pages/auth/LoginPage";
 import VerifyEmailPage from "./pages/auth/VerifyEmailPage";
 import FlightsPage from "./pages/flights/FlightsPage";
 import MyBookingsPage from "./pages/bookings/MyBookingsPage";
-import PrivateRoute from "./utils/PrivateRoute.js";
+import PrivateRoute from "./utils/PrivateRoute";
+import PublicRoute from "./utils/PublicRoute";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <RegisterPage />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <LoginPage />
+            </PublicRoute>
+          }
+        />
         <Route path="/verify-email" element={<VerifyEmailPage />} />
         <Route
           path="/flights"
@@ -29,7 +44,17 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route path="/" element={<Navigate to="/flights" />} />
+        {/* Smart root route: redirect based on login */}
+        <Route
+          path="/"
+          element={
+            localStorage.getItem("token") ? (
+              <Navigate to="/flights" />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
       </Routes>
     </Router>
   );
