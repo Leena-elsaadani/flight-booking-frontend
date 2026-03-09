@@ -1,67 +1,72 @@
 import React, { createContext, useState, useEffect } from "react";
-import api from "../api/api";
+import axios from "../api/api";
 
+// Create context
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [token, setToken] = useState(
+    localStorage.getItem("token") || null
+  );
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
+  // Persist token in localStorage whenever it changes
   useEffect(() => {
-    if (token) {
-      api
-        .get("/auth/me") // optional backend endpoint to get user info
-        .then((res) => setUser(res.data.user))
-        .catch(() => logout());
-    }
+    if (token) localStorage.setItem("token", token);
+    else localStorage.removeItem("token");
   }, [token]);
 
+  // Login function
   const login = async (email, password) => {
     setLoading(true);
-    setError(null);
+    setError("");
     try {
-      const res = await api.post("/auth/login", { email, password });
-      setToken(res.data.token);
-      setUser(res.data.user);
-      localStorage.setItem("token", res.data.token);
+      const res = await axios.post("/auth/login", { email, password });
+      const { token, user } = res.data;
+      setUser(user);
+      setToken(token);
+      return { success: true }; // return to let page handle navigation
     } catch (err) {
-      setError(err.response?.data?.message || err.message);
+      setError(err.response?.data?.message || "Login failed");
+      return { success: false };
     } finally {
       setLoading(false);
     }
   };
 
+  // Logout function
   const logout = () => {
-    setToken(null);
     setUser(null);
-    localStorage.removeItem("token");
+    setToken(null);
   };
 
+  // Register function
   const register = async (name, email, password) => {
     setLoading(true);
-    setError(null);
+    setError("");
     try {
-      const res = await api.post("/auth/register", { name, email, password });
-      return res.data;
+      await axios.post("/auth/register", { name, email, password });
+      return { success: true };
     } catch (err) {
-      setError(err.response?.data?.message || err.message);
-      throw err;
+      setError(err.response?.data?.message || "Registration failed");
+      return { success: false };
     } finally {
       setLoading(false);
     }
   };
 
+  // Verify email function
   const verifyEmail = async (email, code) => {
     setLoading(true);
-    setError(null);
+    setError("");
     try {
-      const res = await api.post("/auth/verify-email", { email, code });
-      return res.data;
+      await axios.post("/auth/verify-email", { email, code });
+      return { success: true };
     } catch (err) {
-      setError(err.response?.data?.message || err.message);
-      throw err;
+      setError(err.response?.data?.message || "Verification failed");
+      return { success: false };
     } finally {
       setLoading(false);
     }
