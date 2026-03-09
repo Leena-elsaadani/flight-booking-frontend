@@ -1,9 +1,11 @@
 // src/pages/flights/FlightsPage.js
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // add this
 import axios from "../../api/api"; // must use this instance
 import FlightCard from "../../components/Flights/FlightCard";
 
 const FlightsPage = () => {
+  const navigate = useNavigate(); // add this
   const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -25,7 +27,7 @@ const FlightsPage = () => {
   };
 
   useEffect(() => {
-    fetchFlights();
+    fetchFlights(); // initial load
   }, []);
 
   const handleSearch = (e) => {
@@ -59,6 +61,15 @@ const FlightsPage = () => {
   return (
     <div>
       <h2>Search Flights</h2>
+
+      {/* Navigate to My Bookings */}
+      <button
+        onClick={() => navigate("/my-bookings")}
+        style={{ marginBottom: "1rem" }}
+      >
+        View My Bookings
+      </button>
+
       <form onSubmit={handleSearch} style={{ marginBottom: "1rem" }}>
         <input
           placeholder="From"
