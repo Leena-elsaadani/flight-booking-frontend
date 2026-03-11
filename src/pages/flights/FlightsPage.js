@@ -1,11 +1,11 @@
 // src/pages/flights/FlightsPage.js
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // add this
+import { useNavigate } from "react-router-dom";
 import axios from "../../api/api"; // must use this instance
 import FlightCard from "../../components/Flights/FlightCard";
 
 const FlightsPage = () => {
-  const navigate = useNavigate(); // add this
+  const navigate = useNavigate();
   const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -59,47 +59,104 @@ const FlightsPage = () => {
   };
 
   return (
-    <div>
-      <h2>Search Flights</h2>
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+        <div>
+          <h1 className="page-title">Search flights</h1>
+          <p className="page-subtitle">
+            Find the best routes and prices for your next trip.
+          </p>
+        </div>
 
-      {/* Navigate to My Bookings */}
-      <button
-        onClick={() => navigate("/my-bookings")}
-        style={{ marginBottom: "1rem" }}
-      >
-        View My Bookings
-      </button>
+        <button
+          type="button"
+          onClick={() => navigate("/my-bookings")}
+          className="secondary-btn self-start sm:self-auto"
+        >
+          View my bookings
+        </button>
+      </div>
 
-      <form onSubmit={handleSearch} style={{ marginBottom: "1rem" }}>
-        <input
-          placeholder="From"
-          value={filters.from}
-          onChange={(e) => setFilters({ ...filters, from: e.target.value })}
-        />
-        <input
-          placeholder="To"
-          value={filters.to}
-          onChange={(e) => setFilters({ ...filters, to: e.target.value })}
-        />
-        <input
-          type="date"
-          value={filters.date}
-          onChange={(e) => setFilters({ ...filters, date: e.target.value })}
-        />
-        <button type="submit">Search</button>
-      </form>
+      <div className="card-surface p-4 sm:p-5">
+        <form
+          onSubmit={handleSearch}
+          className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
+        >
+          <div className="space-y-1.5">
+            <label
+              htmlFor="from"
+              className="text-xs font-medium uppercase tracking-[0.18em] text-slate-300"
+            >
+              From
+            </label>
+            <input
+              id="from"
+              placeholder="City or airport"
+              value={filters.from}
+              onChange={(e) =>
+                setFilters({ ...filters, from: e.target.value })
+              }
+              className="form-input"
+            />
+          </div>
 
-      {loading && <p>Loading flights...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {!loading && flights.length === 0 && <p>No flights found</p>}
+          <div className="space-y-1.5">
+            <label
+              htmlFor="to"
+              className="text-xs font-medium uppercase tracking-[0.18em] text-slate-300"
+            >
+              To
+            </label>
+            <input
+              id="to"
+              placeholder="City or airport"
+              value={filters.to}
+              onChange={(e) => setFilters({ ...filters, to: e.target.value })}
+              className="form-input"
+            />
+          </div>
 
-      {flights.map((flight) => (
-        <FlightCard
-          key={flight._id}
-          flight={flight}
-          onBook={() => handleBook(flight)}
-        />
-      ))}
+          <div className="space-y-1.5">
+            <label
+              htmlFor="date"
+              className="text-xs font-medium uppercase tracking-[0.18em] text-slate-300"
+            >
+              Date
+            </label>
+            <input
+              id="date"
+              type="date"
+              value={filters.date}
+              onChange={(e) => setFilters({ ...filters, date: e.target.value })}
+              className="form-input"
+            />
+          </div>
+
+          <div className="flex items-end">
+            <button type="submit" className="primary-btn w-full">
+              Search flights
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {loading && (
+        <p className="text-sm text-slate-300/90">Loading flights...</p>
+      )}
+      {error && <p className="alert-error">{error}</p>}
+      {!loading && flights.length === 0 && (
+        <p className="text-sm text-slate-300/80">No flights found.</p>
+      )}
+
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {flights.map((flight) => (
+          <FlightCard
+            key={flight._id}
+            flight={flight}
+            onBook={() => handleBook(flight)}
+          />
+        ))}
+      </div>
     </div>
   );
 };

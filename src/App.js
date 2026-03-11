@@ -5,31 +5,38 @@ import VerifyEmailPage from "./pages/auth/VerifyEmailPage";
 import FlightsPage from "./pages/flights/FlightsPage";
 import MyBookingsPage from "./pages/bookings/MyBookingsPage";
 import PrivateRoute from "./utils/PrivateRoute.js";
+import Header from "./components/Layout/Header";
+import "./index.css";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/register" element={<RegisterPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/verify-email" element={<VerifyEmailPage />} />
-      <Route
-        path="/flights"
-        element={
-          <PrivateRoute>
-            <FlightsPage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/my-bookings"
-        element={
-          <PrivateRoute>
-            <MyBookingsPage />
-          </PrivateRoute>
-        }
-      />
-      <Route path="/" element={<Navigate to="/flights" />} />
-    </Routes>
+    <div className="app-gradient-bg">
+      <Header />
+      <main className="page-shell">
+        <Routes>
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/verify-email" element={<VerifyEmailPage />} />
+          <Route
+            path="/flights"
+            element={
+              <PrivateRoute>
+                <FlightsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/my-bookings"
+            element={
+              <PrivateRoute>
+                <MyBookingsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route path="/" element={<Navigate to="/flights" />} />
+        </Routes>
+      </main>
+    </div>
   );
 }
 

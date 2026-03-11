@@ -22,28 +22,61 @@ const VerifyEmailPage = () => {
   };
 
   return (
-    <div className="auth-container">
-      <h2>Verify Email</h2>
-      {loading && <Loader />}
-      {error && <p className="error">{error}</p>}
-      {successMsg && <p className="success">{successMsg}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          required
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="6-digit verification code"
-          value={code}
-          required
-          onChange={(e) => setCode(e.target.value)}
-        />
-        <button type="submit">Verify</button>
-      </form>
+    <div className="mx-auto flex w-full max-w-md flex-col gap-6">
+      <div className="space-y-1">
+        <h1 className="page-title">Verify your email</h1>
+        <p className="page-subtitle">
+          Enter the 6-digit code we sent to your inbox.
+        </p>
+      </div>
+
+      <div className="card-surface p-6 sm:p-7">
+        {loading && <Loader />}
+        {error && <p className="alert-error">{error}</p>}
+        {successMsg && <p className="alert-success">{successMsg}</p>}
+
+        <form onSubmit={handleSubmit} className="mt-2 space-y-4">
+          <div className="space-y-1.5">
+            <label
+              htmlFor="verify-email"
+              className="text-xs font-medium uppercase tracking-[0.18em] text-slate-300"
+            >
+              Email
+            </label>
+            <input
+              id="verify-email"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              required
+              onChange={(e) => setEmail(e.target.value)}
+              className="form-input"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label
+              htmlFor="code"
+              className="text-xs font-medium uppercase tracking-[0.18em] text-slate-300"
+            >
+              Verification code
+            </label>
+            <input
+              id="code"
+              type="text"
+              placeholder="6-digit code"
+              value={code}
+              required
+              onChange={(e) => setCode(e.target.value)}
+              className="form-input tracking-[0.3em] text-center"
+            />
+          </div>
+
+          <button type="submit" className="primary-btn w-full mt-2">
+            Verify email
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
